@@ -21,6 +21,21 @@ class KaggleToSQLPipeline:
         self.port = port
         # server_url is used for general server actions (like creating the DB)
         self.server_url = f"mysql+pymysql://{user}:{password}@{host}:{port}"
+
+        # --- NEW: Connection Validation ---
+        print("Validating database connection...")
+        temp_engine = create_engine(self.server_url)
+        try:
+            with temp_engine.connect() as conn:
+                print("Connection successful!")
+        except Exception as e:
+            # If the password is wrong, it raises an error here
+            print(f"\n[CRITICAL ERROR] Could not connect to MySQL: {e}")
+            print("Please check your password and port settings.")
+            import sys
+            sys.exit(1) # Stop the script immediately
+        finally:
+            temp_engine.dispose()
         
     def download_data(self, dataset_handle):
         """Downloads dataset from Kaggle and returns the local path."""
