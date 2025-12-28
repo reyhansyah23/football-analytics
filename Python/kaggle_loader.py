@@ -99,6 +99,34 @@ class KaggleToSQLPipeline:
         finally:
             engine.dispose()
 
+    def export_df_to_sql(self, df, table_name, if_exists='replace'):
+            """Exports an existing Pandas DataFrame to the SQL database."""
+            # Ensure the dataframe is not empty
+            if df.empty:
+                print("Error: The provided DataFrame is empty.")
+                return
+
+            self.ensure_database_exists()
+            
+            print(f"--- Exporting DataFrame to table '{table_name}' ---")
+            db_url = f"{self.server_url}/{self.db_name}"
+            engine = create_engine(db_url)
+
+            try:
+                # chunksize=1000 ensures large dataframes are uploaded in batches
+                df.to_sql(
+                    name=table_name,
+                    con=engine,
+                    index=False,
+                    if_exists=if_exists,
+                    chunksize=1000
+                )
+                print(f"Successfully exported {len(df)} rows to '{table_name}'.")
+            except Exception as e:
+                print(f"An error occurred during DataFrame export: {e}")
+            finally:
+                engine.dispose()
+
 # --- Execution ---
 if __name__ == "__main__":
     import sys
