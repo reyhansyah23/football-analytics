@@ -11,22 +11,11 @@ class WikiTableParser:
         response = requests.get(html_content, headers=headers_http)
         self.soup = BeautifulSoup(response.text, 'html.parser')
 
-        # """Initialize with HTML string or a soup object."""
-        # if isinstance(html_content, BeautifulSoup):
-        #     self.soup = html_content
-        # else:
-        #     self.soup = BeautifulSoup(html_content, 'html.parser')
-
         self.df = None
 
     def parse_managers_table(self, table_keyword='Managers'):
         """Finds the table by caption and extracts the data."""
         target_table = self._find_table(table_keyword)
-        # for table in self.find_all('table'):
-        #     caption = table.find('caption')
-        #     if caption and 'Managers' in caption.get_text():
-        #         target_table = table
-        #         break
         
         if not target_table:
             print(f"Error: Could not find table with caption containing '{table_keyword}'")
