@@ -2,7 +2,7 @@
 Kaggle to MySQL ETL Pipeline
 ---------------------------
 This script automates the process of downloading a dataset from Kaggle
-and exporting specific CSV files into a MySQL database.
+and exporting specific CSV files or Dataframe into a MySQL database.
 """
 
 import os
