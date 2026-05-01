@@ -8,11 +8,12 @@ and exporting specific CSV files or Dataframe into a MySQL database.
 import os
 import pandas as pd
 import kagglehub
+import time
 from sqlalchemy import create_engine, text
 from sqlalchemy.exc import SQLAlchemyError
 
 class KaggleToSQLPipeline:
-    def __init__(self, db_name, user, password, host='localhost', port='3307'):
+    def __init__(self, db_name, user, password, host, port):
         # Store database credentials and connection strings
         self.db_name = db_name
         self.user = user
@@ -21,6 +22,7 @@ class KaggleToSQLPipeline:
         self.port = port
         # server_url is used for general server actions (like creating the DB)
         self.server_url = f"mysql+pymysql://{user}:{password}@{host}:{port}"
+        self.wait_for_mysql()
 
         # --- NEW: Connection Validation ---
         print("Validating database connection...")
@@ -30,12 +32,30 @@ class KaggleToSQLPipeline:
                 print("Connection successful!")
         except Exception as e:
             # If the password is wrong, it raises an error here
-            print(f"\n[CRITICAL ERROR] Could not connect to MySQL: {e}")
+            print(f"\n[CRITICAL ERROR] Could not connect to MySQL: {e} can't connect xto {host}:{port}")
             print("Please check your password and port settings.")
             import sys
             sys.exit(1) # Stop the script immediately
         finally:
             temp_engine.dispose()
+    
+    def wait_for_mysql(self, retries=10, delay=5):
+        print("Validating database connection...")
+
+        for attempt in range(1, retries + 1):
+            try:
+                engine = create_engine(self.server_url)
+                with engine.connect() as conn:
+                    print("✅ Connection successful!")
+                    engine.dispose()
+                    return
+            except Exception as e:
+                print(f"⏳ Attempt {attempt}/{retries} failed: {e}")
+                time.sleep(delay)
+
+        print("\n❌ [CRITICAL ERROR] Could not connect to MySQL after retries.")
+        import sys
+        sys.exit(1)
         
     def download_data(self, dataset_handle):
         """Downloads dataset from Kaggle and returns the local path."""
