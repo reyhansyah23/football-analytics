@@ -1,0 +1,12 @@
+# Use "latest" or "1.8.latest" to ensure it finds the image
+FROM ghcr.io/dbt-labs/dbt-postgres:1.8.latest
+
+WORKDIR /usr/app/dbt
+
+# Copy your dbt project files
+COPY . .
+
+# Force the stable version of the library to avoid the mashumaro error
+RUN pip install "mashumaro<3.13"
+
+# CMD ["run"]

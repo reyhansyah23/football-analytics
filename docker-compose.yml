@@ -1,42 +1,40 @@
 version: '3.8'
 
 services:
-  mysql:
-    image: mysql:8.0
-    container_name: mysql-db
+  etl:
+      build: ./etl
+      container_name: pl_etl
+      volumes:
+        - ./etl:/app
+      env_file:
+        - .env
+      depends_on:
+        - postgres
+        
+  postgres:
+    image: postgres:16
+    container_name: pl_postgres
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: admin
-      MYSQL_DATABASE: football
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     ports:
-      - "3308:3306"
+      - "5432:5432"
     volumes:
-      - mysql_data:/var/lib/mysql
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      interval: 5s
-      timeout: 5s
-      retries: 10
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
 
-  etl:
-    build: .
-    container_name: etl-job
-    # depends_on:
-    #   - mysql
-    env_file:
-      - .env
-    restart: "no"
-    depends_on:
-      mysql:
-        condition: service_healthy
-
-  # metabase:
-  #   image: metabase/metabase
-  #   container_name: metabase
-  #   ports:
-  #     - "3000:3000"
-  #   depends_on:
-  #     - mysql
+  dbt:
+      build: ./dbt
+      container_name: pl_dbt
+      volumes:
+        - ./dbt:/usr/app/dbt
+      environment:
+        - DBT_PROFILES_DIR=/usr/app/dbt
+      depends_on:
+        - postgres
 
 volumes:
-  mysql_data:
+  postgres_data:
+  pgadmin_data:
