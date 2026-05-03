@@ -20,3 +20,6 @@ dbt/logs/
 # OS files
 .DS_Store
 Thumbs.db
+
+# Others
+architecture_img.png
