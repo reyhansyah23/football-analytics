@@ -1,4 +1,4 @@
-version: '3.8'
+# version: '3.8'
 
 services:
   etl:
@@ -37,4 +37,3 @@ services:
 
 volumes:
   postgres_data:
-  pgadmin_data:
