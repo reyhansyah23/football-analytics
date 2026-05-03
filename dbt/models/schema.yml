@@ -1,20 +1,26 @@
-
 version: 2
 
 models:
-  - name: my_first_dbt_model
-    description: "A starter dbt model"
+  - name: stg_matches
+    description: "Deduplicated and cleaned match data from the Premier League API."
     columns:
-      - name: id
+      - name: match_id
         description: "The primary key for this table"
         data_tests:
           - unique
           - not_null
-
-  - name: my_second_dbt_model
-    description: "A starter dbt model"
+  - name: stg_teams
+    description: "Deduplicated and cleaned team data from the Premier League API."
     columns:
-      - name: id
+      - name: team_season_id
+        description: "The primary key for this table"
+        data_tests:
+          - unique
+          - not_null
+  - name: stg_team_squad
+    description: "Deduplicated and cleaned player data from the Premier League API."
+    columns:
+      - name: player_season_team_id
         description: "The primary key for this table"
         data_tests:
           - unique

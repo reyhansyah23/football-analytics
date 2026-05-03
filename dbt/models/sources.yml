@@ -6,3 +6,5 @@ sources:
     schema: raw
     tables:
       - name: raw_teams
+      - name: raw_matches
+      - name: raw_players
