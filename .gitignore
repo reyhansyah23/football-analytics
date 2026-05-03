@@ -1,15 +1,22 @@
+# Security & Credentials
 .env
-# config.json
-datasets/
-# *.csv
-# *.zip
-# *.json
-# .kagglehub/
-# kaggle_dataset/
-__pycache__/
-# *.pyc
-# venv/
-# .env/
-# .vscode/
-# .idea/
-# .DS_Store
+dbt/profiles.yml
+dbt/.user.yml
+*.session.sql
+
+# Python & Environments
+.venv/
+etl/venv_etl/
+**/__pycache__/
+*.py[cod]
+
+# dbt Artifacts
+dbt/target/
+dbt/logs/
+
+# IDE Settings
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
