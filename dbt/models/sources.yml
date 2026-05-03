@@ -1,0 +1,10 @@
+version: 2
+
+sources:
+  - name: raw_data
+    database: premier_league_db
+    schema: raw
+    tables:
+      - name: raw_teams
+      - name: raw_matches
+      - name: raw_players

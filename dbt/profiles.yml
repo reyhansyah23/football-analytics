@@ -1,0 +1,12 @@
+dbt_pl:
+  outputs:
+    dev:
+      dbname: premier_league_db
+      host: postgres
+      pass: admin123
+      port: 5432
+      schema: staging
+      threads: 1
+      type: postgres
+      user: admin
+  target: dev
