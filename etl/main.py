@@ -11,7 +11,7 @@ if __name__ == "__main__":
 
     print("Starting ETL Process...")
 
-    scraper = PremierLeagueScraper(season_start=2021, season_end=2025)
+    scraper = PremierLeagueScraper(season_start=2025, season_end=2025)
 
     teams_df = scraper.get_teams()
     players_df = scraper.get_all_squads()
