@@ -35,5 +35,24 @@ services:
       depends_on:
         - postgres
 
+  metabase:
+      image: metabase/metabase:latest
+      container_name: pl_metabase
+      restart: always
+      ports:
+        - "3000:3000"
+      environment:
+        MB_DB_TYPE: postgres
+        MB_DB_DBNAME: ${POSTGRES_DB}
+        MB_DB_PORT: 5432
+        MB_DB_USER: ${POSTGRES_USER}
+        MB_DB_PASS: ${POSTGRES_PASSWORD}
+        MB_DB_HOST: postgres
+      volumes:
+        - metabase_data:/metabase-data
+      depends_on:
+        - postgres
+
 volumes:
   postgres_data:
+  metabase_data:
